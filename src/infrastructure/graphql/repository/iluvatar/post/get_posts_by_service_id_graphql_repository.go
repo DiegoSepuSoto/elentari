@@ -4,6 +4,7 @@ import (
 	"context"
 	"elentari/src/domain/models"
 	"elentari/src/infrastructure/graphql/repository/iluvatar/post/entity"
+	entity2 "elentari/src/shared/entity"
 	"github.com/pzentenoe/graphql-client"
 )
 
@@ -26,7 +27,7 @@ const getPostsByServiceIDQuery = `
 
 func (r postIluvatarRepository) GetPostsByServiceID(serviceID string) ([]*models.Post, error) {
 	var res entity.PostsByServiceIDResponse
-	var errorResp entity.ErrorResponse
+	var errorResp entity2.ErrorResponse
 	graphqlRequest := graphql.NewGraphqlRequest(getPostsByServiceIDQuery)
 	graphqlRequest.Var("id", serviceID)
 

@@ -4,6 +4,7 @@ import (
 	"context"
 	"elentari/src/domain/models"
 	"elentari/src/infrastructure/graphql/repository/iluvatar/post/entity"
+	entity2 "elentari/src/shared/entity"
 	"github.com/pzentenoe/graphql-client"
 )
 
@@ -23,7 +24,7 @@ const getPostsQuery = `
 
 func (r postIluvatarRepository) GetPosts() ([]*models.Post, error) {
 	var res entity.PostsResponse
-	var errorResp entity.ErrorResponse
+	var errorResp entity2.ErrorResponse
 	graphqlRequest := graphql.NewGraphqlRequest(getPostsQuery)
 
 	err := r.graphqlClient.Run(context.Background(), graphqlRequest, &res, &errorResp)

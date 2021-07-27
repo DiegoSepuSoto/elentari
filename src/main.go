@@ -2,9 +2,12 @@ package main
 
 import (
 	"context"
+	categoryUseCase "elentari/src/application/usecase/category"
 	postUseCase "elentari/src/application/usecase/post"
+	categoryRepository "elentari/src/infrastructure/graphql/repository/iluvatar/category"
 	postRepository "elentari/src/infrastructure/graphql/repository/iluvatar/post"
 	"elentari/src/infrastructure/http/handlers/rest/health"
+	"elentari/src/infrastructure/http/handlers/rest/v1/category"
 	postHandler "elentari/src/infrastructure/http/handlers/rest/v1/post"
 	"elentari/src/shared/validations"
 	"github.com/go-playground/validator/v10"
@@ -28,9 +31,14 @@ func main() {
 	health.NewHealthHandler(e)
 
 	graphQLClient := graphql.NewClient(os.Getenv("ILUVATAR_URL"))
+
 	postRepositoryInstance := postRepository.NewPostIluvatarRepository(graphQLClient)
 	postUseCaseInstance := postUseCase.NewPostUseCase(postRepositoryInstance)
 	postHandler.NewPostHandler(e, postUseCaseInstance)
+
+	categoryRepositoryInstance := categoryRepository.NewCategoryIluvatarRepository(graphQLClient)
+	categoryUseCaseInstance := categoryUseCase.NewCategoryUseCase(categoryRepositoryInstance)
+	category.NewCategoryHandler(e, categoryUseCaseInstance)
 
 	quit := make(chan os.Signal, 1)
 	go startServer(e, quit)
