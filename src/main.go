@@ -4,11 +4,14 @@ import (
 	"context"
 	categoryUseCase "elentari/src/application/usecase/category"
 	postUseCase "elentari/src/application/usecase/post"
+	serviceUseCase "elentari/src/application/usecase/service"
 	categoryRepository "elentari/src/infrastructure/graphql/repository/iluvatar/category"
 	postRepository "elentari/src/infrastructure/graphql/repository/iluvatar/post"
+	serviceRepository "elentari/src/infrastructure/graphql/repository/iluvatar/service"
 	"elentari/src/infrastructure/http/handlers/rest/health"
 	"elentari/src/infrastructure/http/handlers/rest/v1/category"
 	postHandler "elentari/src/infrastructure/http/handlers/rest/v1/post"
+	serviceHandler "elentari/src/infrastructure/http/handlers/rest/v1/service"
 	"elentari/src/shared/validations"
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo"
@@ -40,6 +43,10 @@ func main() {
 	categoryUseCaseInstance := categoryUseCase.NewCategoryUseCase(categoryRepositoryInstance)
 	category.NewCategoryHandler(e, categoryUseCaseInstance)
 
+	serviceRepositoryInstance := serviceRepository.NewServiceIluvatarRepository(graphQLClient)
+	serviceUseCaseInstance := serviceUseCase.NewServiceUseCase(serviceRepositoryInstance)
+	serviceHandler.NewServiceHandler(e, serviceUseCaseInstance)
+
 	quit := make(chan os.Signal, 1)
 	go startServer(e, quit)
 	signal.Notify(quit, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
@@ -57,7 +64,7 @@ func startServer(e *echo.Echo, quit chan os.Signal) {
 
 func gracefulShutdown(e *echo.Echo) {
 	log.Print("Shutting down server")
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second * 10)
 	defer cancel()
 	if err := e.Shutdown(ctx); err != nil {
 		e.Logger.Fatal(err)
