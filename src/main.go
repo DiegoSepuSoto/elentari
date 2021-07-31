@@ -4,11 +4,13 @@ import (
 	"context"
 	homeUseCase "elentari/src/application/usecase/home"
 	postUseCase "elentari/src/application/usecase/post"
+	serviceUseCase "elentari/src/application/usecase/service"
 	postRepository "elentari/src/infrastructure/graphql/repository/iluvatar/post"
 	serviceRepository "elentari/src/infrastructure/graphql/repository/iluvatar/service"
 	"elentari/src/infrastructure/http/handlers/rest/health"
 	homeHandler "elentari/src/infrastructure/http/handlers/rest/v1/home"
 	postHandler "elentari/src/infrastructure/http/handlers/rest/v1/post"
+	serviceHandler "elentari/src/infrastructure/http/handlers/rest/v1/service"
 	"elentari/src/shared/validations"
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo"
@@ -39,6 +41,9 @@ func main() {
 	postRepositoryImplementation := postRepository.NewPostIluvatarRepository(graphQLClient)
 	postPageUseCaseImplementation := postUseCase.NewPostUseCase(postRepositoryImplementation)
 	postHandler.NewPostHandler(e, postPageUseCaseImplementation)
+
+	serviceUseCaseImplementation := serviceUseCase.NewServiceUseCase(serviceRepositoryImplementation)
+	serviceHandler.NewServiceHandler(e, serviceUseCaseImplementation)
 
 	quit := make(chan os.Signal, 1)
 	go startServer(e, quit)
