@@ -1,6 +1,8 @@
 package entity
 
-import "elentari/src/infrastructure/graphql/repository/iluvatar/post/entity"
+import (
+	sharedEntity "elentari/src/shared/entity"
+)
 
 type ServicesWithPostsResponse struct {
 	Services []*ServiceWithPosts `json:"servicios"`
@@ -9,5 +11,17 @@ type ServicesWithPostsResponse struct {
 type ServiceWithPosts struct {
 	ID           string                             `json:"id"`
 	Abbreviation string                             `json:"Sigla"`
-	Posts        []*entity.PostWithSummaryAndImages `json:"posts"`
+	Posts        []*PostWithSummaryAndImages `json:"posts"`
+}
+
+type Service struct {
+	ID string `json:"id"`
+	Name string `json:"Nombre"`
+}
+
+type PostWithSummaryAndImages struct {
+	ID      string                `json:"id"`
+	Title   string                `json:"Titulo"`
+	Summary string                `json:"Resumen"`
+	Image   *sharedEntity.IluvatarImage `json:"Imagen"`
 }

@@ -14,7 +14,7 @@ func NewHomeHandler(e *echo.Echo, homeUseCase usecase.HomeUseCase) *homeHandler 
 	h := &homeHandler{homeUseCase: homeUseCase}
 	const basePath = "/v1/home"
 	postGroup := e.Group(basePath)
-	postGroup.GET("", h.getHome)
+	postGroup.GET("/:id", h.getHome)
 
 	return h
 }

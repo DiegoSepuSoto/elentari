@@ -1,9 +1,9 @@
 package entity
 
 type ErrorResponse struct {
-	Errors []*ServiceError `json:"errors"`
+	Errors []*IluvatarError `json:"errors"`
 }
 
-type ServiceError struct {
+type IluvatarError struct {
 	Message string `json:"message"`
 }

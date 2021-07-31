@@ -1,10 +1,20 @@
 package entity
 
-import "elentari/src/shared/entity"
+import (
+	categoryEntity "elentari/src/infrastructure/graphql/repository/iluvatar/category/entity"
+	serviceEntity "elentari/src/infrastructure/graphql/repository/iluvatar/service/entity"
+	sharedEntity "elentari/src/shared/entity"
+)
 
-type PostWithSummaryAndImages struct {
-	ID      string                `json:"id"`
-	Title   string                `json:"Titulo"`
-	Summary string                `json:"Resumen"`
-	Image   *entity.IluvatarImage `json:"Imagen"`
+type DetailedPostResponse struct {
+	DetailedPost *DetailedPost `json:"post"`
+}
+
+type DetailedPost struct {
+	ID         string                      `json:"id"`
+	Title      string                      `json:"Titulo"`
+	Image      *sharedEntity.IluvatarImage `json:"Imagen"`
+	Body       string                      `json:"Cuerpo"`
+	Service    *serviceEntity.Service      `json:"servicio"`
+	Categories []*categoryEntity.Category  `json:"categorias"`
 }
