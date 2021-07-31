@@ -2,16 +2,10 @@ package main
 
 import (
 	"context"
-	categoryUseCase "elentari/src/application/usecase/category"
-	postUseCase "elentari/src/application/usecase/post"
-	serviceUseCase "elentari/src/application/usecase/service"
-	categoryRepository "elentari/src/infrastructure/graphql/repository/iluvatar/category"
-	postRepository "elentari/src/infrastructure/graphql/repository/iluvatar/post"
+	homeUseCase "elentari/src/application/usecase/home"
 	serviceRepository "elentari/src/infrastructure/graphql/repository/iluvatar/service"
 	"elentari/src/infrastructure/http/handlers/rest/health"
-	"elentari/src/infrastructure/http/handlers/rest/v1/category"
-	postHandler "elentari/src/infrastructure/http/handlers/rest/v1/post"
-	serviceHandler "elentari/src/infrastructure/http/handlers/rest/v1/service"
+	homeHandler "elentari/src/infrastructure/http/handlers/rest/v1/home"
 	"elentari/src/shared/validations"
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo"
@@ -33,19 +27,12 @@ func main() {
 
 	health.NewHealthHandler(e)
 
-	graphQLClient := graphql.NewClient(os.Getenv("ILUVATAR_URL"))
+	graphQLClient := graphql.NewClient(os.Getenv("ILUVATAR_URL") + "/graphql")
 
-	postRepositoryInstance := postRepository.NewPostIluvatarRepository(graphQLClient)
-	postUseCaseInstance := postUseCase.NewPostUseCase(postRepositoryInstance)
-	postHandler.NewPostHandler(e, postUseCaseInstance)
+	serviceRepositoryImplementation := serviceRepository.NewServiceIluvatarRepository(graphQLClient)
+	homeUseCaseImplementation := homeUseCase.NewHomeUseCase(serviceRepositoryImplementation)
+	homeHandler.NewHomeHandler(e, homeUseCaseImplementation)
 
-	categoryRepositoryInstance := categoryRepository.NewCategoryIluvatarRepository(graphQLClient)
-	categoryUseCaseInstance := categoryUseCase.NewCategoryUseCase(categoryRepositoryInstance)
-	category.NewCategoryHandler(e, categoryUseCaseInstance)
-
-	serviceRepositoryInstance := serviceRepository.NewServiceIluvatarRepository(graphQLClient)
-	serviceUseCaseInstance := serviceUseCase.NewServiceUseCase(serviceRepositoryInstance)
-	serviceHandler.NewServiceHandler(e, serviceUseCaseInstance)
 
 	quit := make(chan os.Signal, 1)
 	go startServer(e, quit)

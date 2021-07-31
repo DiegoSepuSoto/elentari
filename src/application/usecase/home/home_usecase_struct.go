@@ -1,4 +1,4 @@
-package service
+package home
 
 import "elentari/src/domain/repository"
 
@@ -6,6 +6,6 @@ type UseCase struct {
 	serviceRepository repository.ServiceRepository
 }
 
-func NewServiceUseCase(serviceRepository repository.ServiceRepository) *UseCase {
+func NewHomeUseCase(serviceRepository repository.ServiceRepository) *UseCase {
 	return &UseCase{serviceRepository: serviceRepository}
 }

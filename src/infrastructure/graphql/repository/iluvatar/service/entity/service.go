@@ -1,11 +1,13 @@
 package entity
 
-type ServicesResponse struct {
-	Services []*Service `json:"servicios"`
+import "elentari/src/infrastructure/graphql/repository/iluvatar/post/entity"
+
+type ServicesWithPostsResponse struct {
+	Services []*ServiceWithPosts `json:"servicios"`
 }
 
-type Service struct {
-	ID           string `json:"id"`
-	Name         string `json:"Nombre"`
-	Abbreviation string `json:"Sigla"`
+type ServiceWithPosts struct {
+	ID           string                             `json:"id"`
+	Abbreviation string                             `json:"Sigla"`
+	Posts        []*entity.PostWithSummaryAndImages `json:"posts"`
 }
