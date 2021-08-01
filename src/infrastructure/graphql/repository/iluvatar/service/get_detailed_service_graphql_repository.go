@@ -6,6 +6,7 @@ import (
 	"elentari/src/infrastructure/graphql/repository/iluvatar/service/entity"
 	errorEntity "elentari/src/shared/entity"
 	"github.com/pzentenoe/graphql-client"
+	"os"
 )
 
 const getDetailedService = `
@@ -37,7 +38,7 @@ func (r serviceIluvatarRepository) GetDetailedService(serviceID string) (*models
 func mapEntityDetailedServiceToServicePageModel(service *entity.DetailedService) *models.ServicePage {
 	return &models.ServicePage{
 		ID:          service.ID,
-		LogoURL:     service.Logo.URL,
+		LogoURL:     os.Getenv("ILUVATAR_URL") + service.Logo.URL,
 		Name:        service.Name,
 		Description: service.Description,
 	}
