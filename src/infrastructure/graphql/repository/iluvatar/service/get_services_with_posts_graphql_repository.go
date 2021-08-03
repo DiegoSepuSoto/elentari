@@ -43,20 +43,22 @@ func mapServicesWithPostEntityToHomeModel(entityServices []*entity.ServiceWithPo
 	homePageServices := make([]*models.ServiceWithPosts, 0)
 
 	for _, service := range entityServices {
-		homePagePosts := make([]*models.PostForPreview, 0)
-		for _, post := range service.Posts {
-			homePagePosts = append(homePagePosts, &models.PostForPreview{
-				ID:       post.ID,
-				Title:    post.Title,
-				Summary:  post.Summary,
-				ImageURL: os.Getenv("ILUVATAR_URL") + post.Image.URL,
+		if len(service.Posts) > 0 {
+			homePagePosts := make([]*models.PostForPreview, 0)
+			for _, post := range service.Posts {
+				homePagePosts = append(homePagePosts, &models.PostForPreview{
+					ID:       post.ID,
+					Title:    post.Title,
+					Summary:  post.Summary,
+					ImageURL: os.Getenv("ILUVATAR_URL") + post.Image.URL,
+				})
+			}
+			homePageServices = append(homePageServices, &models.ServiceWithPosts{
+				ID:              service.ID,
+				Abbreviation:    service.Abbreviation,
+				PostsForPreview: homePagePosts,
 			})
 		}
-		homePageServices = append(homePageServices, &models.ServiceWithPosts{
-			ID:              service.ID,
-			Abbreviation:    service.Abbreviation,
-			PostsForPreview: homePagePosts,
-		})
 	}
 
 	return &models.HomePage{ServicesWithPosts: homePageServices}
