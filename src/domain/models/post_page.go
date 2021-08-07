@@ -6,10 +6,11 @@ type PostCategory struct {
 }
 
 type PostPage struct {
-	ID         string          `json:"id"`
-	Title      string          `json:"title"`
-	Image      string          `json:"image"`
-	Body       string          `json:"body"`
-	ServiceID  string          `json:"service_id"`
-	Categories []*PostCategory `json:"categories"`
+	ID          string          `json:"id"`
+	Title       string          `json:"title"`
+	Image       string          `json:"image"`
+	Body        string          `json:"body"`
+	ServiceID   string          `json:"service_id"`
+	ServiceName string          `json:"service_name"`
+	Categories  []*PostCategory `json:"categories"`
 }

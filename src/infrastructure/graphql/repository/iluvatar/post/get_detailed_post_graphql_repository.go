@@ -19,11 +19,12 @@ const getDetailedPost = `
 		Titulo
 		categorias {
 		  id
-		  Nombre
+		  Titulo
 		}
 		Cuerpo
 		servicio {
 		  id
+		  Nombre
 		}
 	  }
 	}
@@ -59,6 +60,7 @@ func mapEntityDetailedPostToPostPageModel(entityPost *entity.DetailedPost) *mode
 		Image:      os.Getenv("ILUVATAR_URL") + entityPost.Image.URL,
 		Body:       entityPost.Body,
 		ServiceID:  entityPost.Service.ID,
+		ServiceName: entityPost.Service.Name,
 		Categories: postCategories,
 	}
 }
