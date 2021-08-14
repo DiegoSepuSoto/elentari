@@ -31,6 +31,8 @@ func (r serviceIluvatarRepository) GetServicesWithPosts() (*models.HomePage, err
 	var errorResp errorEntity.ErrorResponse
 	graphqlRequest := graphql.NewGraphqlRequest(getServicesWithPosts)
 
+	r.fillGraphqlHeaders(graphqlRequest)
+
 	err := r.graphqlClient.Run(context.Background(), graphqlRequest, &res, &errorResp)
 	if err != nil {
 		return nil, err

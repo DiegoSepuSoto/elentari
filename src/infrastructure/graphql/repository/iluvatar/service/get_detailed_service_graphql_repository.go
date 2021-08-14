@@ -27,6 +27,8 @@ func (r serviceIluvatarRepository) GetDetailedService(serviceID string) (*models
 	graphqlRequest := graphql.NewGraphqlRequest(getDetailedService)
 	graphqlRequest.Var("id", serviceID)
 
+	r.fillGraphqlHeaders(graphqlRequest)
+
 	err := r.graphqlClient.Run(context.Background(), graphqlRequest, &res, &errorResp)
 	if err != nil {
 		return nil, err

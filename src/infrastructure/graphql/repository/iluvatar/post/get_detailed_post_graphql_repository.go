@@ -36,6 +36,8 @@ func (r postIluvatarRepository) GetDetailedPost(postID string) (*models.PostPage
 	graphqlRequest := graphql.NewGraphqlRequest(getDetailedPost)
 	graphqlRequest.Var("id", postID)
 
+	r.fillGraphqlHeaders(graphqlRequest)
+
 	err := r.graphqlClient.Run(context.Background(), graphqlRequest, &res, &errorResp)
 	if err != nil {
 		return nil, err
