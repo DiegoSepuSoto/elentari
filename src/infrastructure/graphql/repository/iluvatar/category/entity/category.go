@@ -6,5 +6,5 @@ type CategoriesResponse struct {
 
 type Category struct {
 	ID string `json:"id"`
-	Name string `json:"Nombre"`
+	Name string `json:"Titulo"`
 }
