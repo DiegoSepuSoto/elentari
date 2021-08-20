@@ -1,6 +1,8 @@
 package entity
 
 import (
+	contactEntity "elentari/src/infrastructure/graphql/repository/iluvatar/contact/entity"
+	personEntity "elentari/src/infrastructure/graphql/repository/iluvatar/person/entity"
 	sharedEntity "elentari/src/shared/entity"
 )
 
@@ -35,4 +37,6 @@ type DetailedService struct {
 	Name        string                      `json:"Nombre"`
 	Description string                      `json:"Descripcion"`
 	Logo        *sharedEntity.IluvatarImage `json:"Logo"`
+	Persons     []*personEntity.Person      `json:"personas"`
+	Contacts    []*contactEntity.Contact    `json:"contactos"`
 }
