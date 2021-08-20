@@ -14,7 +14,7 @@ const getServicesWithPosts = `
 	  servicios {
 		id
 		Sigla
-		posts {
+		posts(limit: 5, sort: "createdAt:desc") {
 		  id
 		  Imagen {
 			url
