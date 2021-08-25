@@ -18,3 +18,7 @@ type DetailedPost struct {
 	Service    *serviceEntity.ServiceInPost `json:"servicio"`
 	Categories []*categoryEntity.Category   `json:"categorias"`
 }
+
+type PostsByTermResponse struct {
+	Posts []*serviceEntity.PostWithSummaryAndImages `json:"posts"`
+}
