@@ -1,6 +1,10 @@
 package category
 
-import "github.com/pzentenoe/graphql-client"
+import (
+	"fmt"
+	"github.com/pzentenoe/graphql-client"
+	"os"
+)
 
 type categoryIluvatarRepository struct {
 	graphqlClient *graphql.Client
@@ -8,4 +12,9 @@ type categoryIluvatarRepository struct {
 
 func NewCategoryIluvatarRepository(graphqlClient *graphql.Client) *categoryIluvatarRepository {
 	return &categoryIluvatarRepository{graphqlClient: graphqlClient}
+}
+
+func (r *categoryIluvatarRepository) fillGraphqlHeaders(graphqlRequest *graphql.GraphqlRequest) {
+	iluvatarToken := os.Getenv("ILUVATAR_TOKEN")
+	graphqlRequest.Header.Add("Authorization", fmt.Sprintf("Bearer %s", iluvatarToken))
 }

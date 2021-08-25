@@ -16,7 +16,7 @@ type ServiceWithPosts struct {
 	Posts        []*PostWithSummaryAndImages `json:"posts"`
 }
 
-type Service struct {
+type ServiceInPost struct {
 	ID   string `json:"id"`
 	Name string `json:"Nombre"`
 }
@@ -39,4 +39,14 @@ type DetailedService struct {
 	Logo        *sharedEntity.IluvatarImage `json:"Logo"`
 	Persons     []*personEntity.Person      `json:"personas"`
 	Contacts    []*contactEntity.Contact    `json:"contactos"`
+}
+
+type Service struct {
+	ID   string                      `json:"id"`
+	Name string                      `json:"Nombre"`
+	Logo *sharedEntity.IluvatarImage `json:"Logo"`
+}
+
+type ServicesResponse struct {
+	Services []*Service `json:"servicios"`
 }

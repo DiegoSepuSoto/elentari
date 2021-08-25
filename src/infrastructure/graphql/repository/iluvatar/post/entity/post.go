@@ -14,7 +14,7 @@ type DetailedPost struct {
 	ID         string                      `json:"id"`
 	Title      string                      `json:"Titulo"`
 	Image      *sharedEntity.IluvatarImage `json:"Imagen"`
-	Body       string                      `json:"Cuerpo"`
-	Service    *serviceEntity.Service      `json:"servicio"`
-	Categories []*categoryEntity.Category  `json:"categorias"`
+	Body       string                       `json:"Cuerpo"`
+	Service    *serviceEntity.ServiceInPost `json:"servicio"`
+	Categories []*categoryEntity.Category   `json:"categorias"`
 }
