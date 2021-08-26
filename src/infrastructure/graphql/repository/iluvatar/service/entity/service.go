@@ -10,9 +10,14 @@ type ServicesWithPostsResponse struct {
 	Services []*ServiceWithPosts `json:"servicios"`
 }
 
+type ServiceWithPostsResponse struct {
+	Service *ServiceWithPosts `json:"servicio"`
+}
+
 type ServiceWithPosts struct {
 	ID           string                      `json:"id"`
 	Abbreviation string                      `json:"Sigla"`
+	Name         string                      `json:"Nombre"`
 	Posts        []*PostWithSummaryAndImages `json:"posts"`
 }
 
