@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	categoryUseCase "elentari/src/application/usecase/category"
 	homeUseCase "elentari/src/application/usecase/home"
 	postUseCase "elentari/src/application/usecase/post"
 	searchUseCase "elentari/src/application/usecase/search"
@@ -10,6 +11,7 @@ import (
 	postRepository "elentari/src/infrastructure/graphql/repository/iluvatar/post"
 	serviceRepository "elentari/src/infrastructure/graphql/repository/iluvatar/service"
 	"elentari/src/infrastructure/http/handlers/rest/health"
+	categoryHandler "elentari/src/infrastructure/http/handlers/rest/v1/category"
 	homeHandler "elentari/src/infrastructure/http/handlers/rest/v1/home"
 	postHandler "elentari/src/infrastructure/http/handlers/rest/v1/post"
 	searchHandler "elentari/src/infrastructure/http/handlers/rest/v1/search"
@@ -51,6 +53,9 @@ func main() {
 	categoryRepositoryImplementation := categoryRepository.NewCategoryIluvatarRepository(graphQLClient)
 	searchUseCaseImplementation := searchUseCase.NewSearchUseCase(serviceRepositoryImplementation, categoryRepositoryImplementation)
 	searchHandler.NewSearchHandler(e, searchUseCaseImplementation)
+
+	categoryUseCaseImplementation := categoryUseCase.NewCategoryUseCase(categoryRepositoryImplementation)
+	categoryHandler.NewCategoryHandler(e, categoryUseCaseImplementation)
 
 	quit := make(chan os.Signal, 1)
 	go startServer(e, quit)

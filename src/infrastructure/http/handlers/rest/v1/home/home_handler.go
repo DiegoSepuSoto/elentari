@@ -13,8 +13,8 @@ type homeHandler struct {
 func NewHomeHandler(e *echo.Echo, homeUseCase usecase.HomeUseCase) *homeHandler {
 	h := &homeHandler{homeUseCase: homeUseCase}
 	const basePath = "/v1/home"
-	postGroup := e.Group(basePath)
-	postGroup.GET("", h.getHome)
+	homeGroup := e.Group(basePath)
+	homeGroup.GET("", h.getHome)
 
 	return h
 }
