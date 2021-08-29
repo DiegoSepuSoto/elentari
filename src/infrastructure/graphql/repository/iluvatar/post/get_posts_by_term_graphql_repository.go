@@ -7,6 +7,7 @@ import (
 	serviceEntity "elentari/src/infrastructure/graphql/repository/iluvatar/service/entity"
 	errorEntity "elentari/src/shared/entity"
 	"github.com/pzentenoe/graphql-client"
+	"log"
 	"os"
 )
 
@@ -33,6 +34,7 @@ func (r *postIluvatarRepository) GetPostsByTerm(searchTerm string) (*models.Post
 
 	err := r.graphqlClient.Run(context.Background(), graphqlRequest, &res, &errorResp)
 	if err != nil {
+		log.Printf("Error getting posts by term: %s from GraphQL repository: %s", searchTerm, err.Error())
 		return nil, err
 	}
 

@@ -6,6 +6,7 @@ import (
 	"elentari/src/infrastructure/graphql/repository/iluvatar/category/entity"
 	errorEntity "elentari/src/shared/entity"
 	"github.com/pzentenoe/graphql-client"
+	"log"
 	"os"
 )
 
@@ -36,6 +37,7 @@ func (r *categoryIluvatarRepository) GetCategoryWithPosts(categoryID string) (*m
 
 	err := r.graphqlClient.Run(context.Background(), graphqlRequest, &res, &errorResp)
 	if err != nil {
+		log.Printf("Error getting category: %s with posts from GraphQL repository: %s", categoryID, err.Error())
 		return nil, err
 	}
 

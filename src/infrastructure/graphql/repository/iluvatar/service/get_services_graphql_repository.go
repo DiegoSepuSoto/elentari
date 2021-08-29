@@ -6,6 +6,7 @@ import (
 	"elentari/src/infrastructure/graphql/repository/iluvatar/service/entity"
 	errorEntity "elentari/src/shared/entity"
 	"github.com/pzentenoe/graphql-client"
+	"log"
 	"os"
 )
 
@@ -31,6 +32,7 @@ func (r *serviceIluvatarRepository) GetServices() ([]*models.Service, error) {
 
 	err := r.graphqlClient.Run(context.Background(), graphqlRequest, &res, &errorResp)
 	if err != nil {
+		log.Printf("Error getting services from GraphQL repository: %s", err.Error())
 		return nil, err
 	}
 

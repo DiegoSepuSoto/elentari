@@ -6,6 +6,7 @@ import (
 	"elentari/src/infrastructure/graphql/repository/iluvatar/post/entity"
 	errorEntity "elentari/src/shared/entity"
 	"github.com/pzentenoe/graphql-client"
+	"log"
 	"os"
 )
 
@@ -40,6 +41,7 @@ func (r postIluvatarRepository) GetDetailedPost(postID string) (*models.PostPage
 
 	err := r.graphqlClient.Run(context.Background(), graphqlRequest, &res, &errorResp)
 	if err != nil {
+		log.Printf("Error getting detailed post %s from GraphQL repository: %s", postID, err.Error())
 		return nil, err
 	}
 
