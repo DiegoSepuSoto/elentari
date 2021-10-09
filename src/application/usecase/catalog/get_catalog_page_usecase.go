@@ -1,8 +1,8 @@
-package search
+package catalog
 
 import "elentari/src/domain/models"
 
-func (u *UseCase) GetSearchPage() (*models.SearchPage, error) {
+func (u *UseCase) GetCatalogPage() (*models.CatalogPage, error) {
 	services, err := u.serviceRepository.GetServices()
 	if err != nil {
 		return nil, err
@@ -13,7 +13,7 @@ func (u *UseCase) GetSearchPage() (*models.SearchPage, error) {
 		return nil, err
 	}
 
-	return &models.SearchPage{
+	return &models.CatalogPage{
 		Services:   services,
 		Categories: categories,
 	}, nil

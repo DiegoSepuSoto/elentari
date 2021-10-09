@@ -1,4 +1,4 @@
-package search
+package catalog
 
 import "elentari/src/domain/repository"
 
@@ -7,7 +7,7 @@ type UseCase struct {
 	categoryRepository repository.CategoryRepository
 }
 
-func NewSearchUseCase(serviceRepository repository.ServiceRepository, categoryRepository repository.CategoryRepository) *UseCase {
+func NewCatalogUseCase(serviceRepository repository.ServiceRepository, categoryRepository repository.CategoryRepository) *UseCase {
 	return &UseCase{
 		serviceRepository:  serviceRepository,
 		categoryRepository: categoryRepository,

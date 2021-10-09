@@ -11,7 +11,7 @@ type Category struct {
 	Name string `json:"name"`
 }
 
-type SearchPage struct {
+type CatalogPage struct {
 	Services []*Service `json:"services"`
 	Categories []*Category `json:"categories"`
 }

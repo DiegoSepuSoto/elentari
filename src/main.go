@@ -2,19 +2,19 @@ package main
 
 import (
 	"context"
+	catalogUseCase "elentari/src/application/usecase/catalog"
 	categoryUseCase "elentari/src/application/usecase/category"
 	homeUseCase "elentari/src/application/usecase/home"
 	postUseCase "elentari/src/application/usecase/post"
-	searchUseCase "elentari/src/application/usecase/search"
 	serviceUseCase "elentari/src/application/usecase/service"
 	categoryRepository "elentari/src/infrastructure/graphql/repository/iluvatar/category"
 	postRepository "elentari/src/infrastructure/graphql/repository/iluvatar/post"
 	serviceRepository "elentari/src/infrastructure/graphql/repository/iluvatar/service"
 	"elentari/src/infrastructure/http/handlers/rest/health"
+	catalogHandler "elentari/src/infrastructure/http/handlers/rest/v1/catalog"
 	categoryHandler "elentari/src/infrastructure/http/handlers/rest/v1/category"
 	homeHandler "elentari/src/infrastructure/http/handlers/rest/v1/home"
 	postHandler "elentari/src/infrastructure/http/handlers/rest/v1/post"
-	searchHandler "elentari/src/infrastructure/http/handlers/rest/v1/search"
 	serviceHandler "elentari/src/infrastructure/http/handlers/rest/v1/service"
 	"elentari/src/shared/validations"
 	"github.com/go-playground/validator/v10"
@@ -51,8 +51,8 @@ func main() {
 	serviceHandler.NewServiceHandler(e, serviceUseCaseImplementation)
 
 	categoryRepositoryImplementation := categoryRepository.NewCategoryIluvatarRepository(graphQLClient)
-	searchUseCaseImplementation := searchUseCase.NewSearchUseCase(serviceRepositoryImplementation, categoryRepositoryImplementation)
-	searchHandler.NewSearchHandler(e, searchUseCaseImplementation)
+	catalogUseCaseImplementation := catalogUseCase.NewCatalogUseCase(serviceRepositoryImplementation, categoryRepositoryImplementation)
+	catalogHandler.NewCatalogHandler(e, catalogUseCaseImplementation)
 
 	categoryUseCaseImplementation := categoryUseCase.NewCategoryUseCase(categoryRepositoryImplementation)
 	categoryHandler.NewCategoryHandler(e, categoryUseCaseImplementation)
@@ -74,7 +74,7 @@ func startServer(e *echo.Echo, quit chan os.Signal) {
 
 func gracefulShutdown(e *echo.Echo) {
 	log.Print("Shutting down server")
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second * 10)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
 	if err := e.Shutdown(ctx); err != nil {
 		e.Logger.Fatal(err)
