@@ -63,7 +63,7 @@ func mapEntityDetailedServiceToServicePageModel(service *entity.DetailedService)
 		if person.ProfilePicture == nil {
 			profilePictureLink = ""
 		} else {
-			profilePictureLink = os.Getenv("ILUVATAR_URL") + person.ProfilePicture.URL
+			profilePictureLink = os.Getenv("ILUVATAR_CMS_HOST") + person.ProfilePicture.URL
 		}
 		modelPersons = append(modelPersons, &models.Person{
 			ID:             person.ID,
@@ -85,7 +85,7 @@ func mapEntityDetailedServiceToServicePageModel(service *entity.DetailedService)
 
 	return &models.ServicePage{
 		ID:          service.ID,
-		LogoURL:     os.Getenv("ILUVATAR_URL") + service.Logo.URL,
+		LogoURL:     os.Getenv("ILUVATAR_CMS_HOST") + service.Logo.URL,
 		Name:        service.Name,
 		Description: service.Description,
 		Persons:     modelPersons,

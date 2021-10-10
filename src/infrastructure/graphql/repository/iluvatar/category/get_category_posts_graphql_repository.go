@@ -52,7 +52,7 @@ func mapEntityCategoryWithPostsToModelCategoryWithPosts(entityCategoryWithPosts 
 			ID:       post.ID,
 			Title:    post.Title,
 			Summary:  post.Summary,
-			ImageURL: os.Getenv("ILUVATAR_URL") + post.Image.URL,
+			ImageURL: os.Getenv("ILUVATAR_CMS_HOST") + post.Image.URL,
 		})
 	}
 

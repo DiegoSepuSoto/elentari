@@ -61,7 +61,7 @@ func mapEntityDetailedPostToPostPageModel(entityPost *entity.DetailedPost) *mode
 	return &models.PostPage{
 		ID:         entityPost.ID,
 		Title:      entityPost.Title,
-		Image:      os.Getenv("ILUVATAR_URL") + entityPost.Image.URL,
+		Image:      os.Getenv("ILUVATAR_CMS_HOST") + entityPost.Image.URL,
 		Body:       entityPost.Body,
 		ServiceID:  entityPost.Service.ID,
 		ServiceName: entityPost.Service.Name,

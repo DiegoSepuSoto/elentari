@@ -46,7 +46,7 @@ func mapEntityServicesToServicesModel(entityServices []*entity.Service) []*model
 		modelServices = append(modelServices, &models.Service{
 			ID:      service.ID,
 			Name:    service.Name,
-			LogoURL: os.Getenv("ILUVATAR_URL") + service.Logo.URL,
+			LogoURL: os.Getenv("ILUVATAR_CMS_HOST") + service.Logo.URL,
 		})
 	}
 

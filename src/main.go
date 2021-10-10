@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	authUseCase "elentari/src/application/usecase/auth"
 	catalogUseCase "elentari/src/application/usecase/catalog"
 	categoryUseCase "elentari/src/application/usecase/category"
 	homeUseCase "elentari/src/application/usecase/home"
@@ -11,17 +12,21 @@ import (
 	postRepository "elentari/src/infrastructure/graphql/repository/iluvatar/post"
 	serviceRepository "elentari/src/infrastructure/graphql/repository/iluvatar/service"
 	"elentari/src/infrastructure/http/handlers/rest/health"
+	authHandler "elentari/src/infrastructure/http/handlers/rest/v1/auth"
 	catalogHandler "elentari/src/infrastructure/http/handlers/rest/v1/catalog"
 	categoryHandler "elentari/src/infrastructure/http/handlers/rest/v1/category"
 	homeHandler "elentari/src/infrastructure/http/handlers/rest/v1/home"
 	postHandler "elentari/src/infrastructure/http/handlers/rest/v1/post"
 	serviceHandler "elentari/src/infrastructure/http/handlers/rest/v1/service"
+	authRepository "elentari/src/infrastructure/http/repository/iluvatar/auth"
 	"elentari/src/shared/validations"
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	"github.com/labstack/gommon/log"
 	"github.com/pzentenoe/graphql-client"
+	client "github.com/pzentenoe/httpclient-call-go"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
@@ -34,10 +39,10 @@ func main() {
 	e.HideBanner = true
 	e.Use(middleware.CORS())
 	e.Use(middleware.Recover())
-
+	
 	health.NewHealthHandler(e)
 
-	graphQLClient := graphql.NewClient(os.Getenv("ILUVATAR_URL") + "/graphql")
+	graphQLClient := graphql.NewClient(os.Getenv("ILUVATAR_CMS_HOST") + "/graphql")
 
 	serviceRepositoryImplementation := serviceRepository.NewServiceIluvatarRepository(graphQLClient)
 	homeUseCaseImplementation := homeUseCase.NewHomeUseCase(serviceRepositoryImplementation)
@@ -57,6 +62,11 @@ func main() {
 	categoryUseCaseImplementation := categoryUseCase.NewCategoryUseCase(categoryRepositoryImplementation)
 	categoryHandler.NewCategoryHandler(e, categoryUseCaseImplementation)
 
+	iluvatarHTTPClient := client.NewHTTPClientCall(os.Getenv("ILUVATAR_HOST"), &http.Client{})
+	authRepositoryImplementation := authRepository.NewAuthIluvatarRepository(iluvatarHTTPClient)
+	authUsecaseImplementation := authUseCase.NewAuthUseCase(authRepositoryImplementation)
+	authHandler.NewAuthHandler(e, authUsecaseImplementation)
+	
 	quit := make(chan os.Signal, 1)
 	go startServer(e, quit)
 	signal.Notify(quit, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
