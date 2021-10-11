@@ -17,6 +17,7 @@ func NewAuthHandler(e *echo.Echo, authUseCase usecase.AuthUseCase) *authHandler 
 	authHandlerWithoutAuthentication := e.Group(basePath)
 	authHandlerWithoutAuthentication.POST("/login", h.Login)
 	authHandlerWithoutAuthentication.POST("/refresh-token", h.RefreshToken)
+	authHandlerWithoutAuthentication.POST("/validate-token", h.validateToken)
 
 	return h
 }

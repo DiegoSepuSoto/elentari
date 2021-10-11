@@ -18,7 +18,7 @@ type ValidateTokenResponse struct {
 func (r *authIluvatarRepository) ValidateToken(accessToken string) (bool, error) {
 	headers := http.Header{
 		echo.HeaderContentType: []string{echo.MIMEApplicationJSON},
-		client.HeaderAuthorization: []string{"Bearer " + accessToken},
+		client.HeaderAuthorization: []string{accessToken},
 	}
 
 	response, err := r.httpClientCall.
