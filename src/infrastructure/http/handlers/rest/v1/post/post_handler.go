@@ -10,10 +10,11 @@ type postHandler struct {
 	postUseCase usecase.PostUseCase
 }
 
-func NewPostHandler(e *echo.Echo, postUseCase usecase.PostUseCase) *postHandler {
+func NewPostHandler(e *echo.Echo, postUseCase usecase.PostUseCase, jwtMiddleware echo.MiddlewareFunc) *postHandler {
 	h := &postHandler{postUseCase: postUseCase}
 	const basePath = "/v1/post"
 	postGroup := e.Group(basePath)
+	postGroup.Use(jwtMiddleware)
 	postGroup.GET("/:id", h.getPostPage)
 	postGroup.GET("/search/:searchTerm", h.getPostsByTerm)
 

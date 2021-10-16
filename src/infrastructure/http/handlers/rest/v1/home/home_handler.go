@@ -10,10 +10,11 @@ type homeHandler struct {
 	homeUseCase usecase.HomeUseCase
 }
 
-func NewHomeHandler(e *echo.Echo, homeUseCase usecase.HomeUseCase) *homeHandler {
+func NewHomeHandler(e *echo.Echo, homeUseCase usecase.HomeUseCase, jwtMiddleware echo.MiddlewareFunc) *homeHandler {
 	h := &homeHandler{homeUseCase: homeUseCase}
 	const basePath = "/v1/home"
 	homeGroup := e.Group(basePath)
+	homeGroup.Use(jwtMiddleware)
 	homeGroup.GET("", h.getHome)
 
 	return h

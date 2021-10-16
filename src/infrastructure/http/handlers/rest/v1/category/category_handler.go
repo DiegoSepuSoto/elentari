@@ -10,10 +10,11 @@ type categoryHandler struct {
 	categoryUseCase usecase.CategoryUseCase
 }
 
-func NewCategoryHandler(e *echo.Echo, categoryUseCase usecase.CategoryUseCase) *categoryHandler {
+func NewCategoryHandler(e *echo.Echo, categoryUseCase usecase.CategoryUseCase, jwtMiddleware echo.MiddlewareFunc) *categoryHandler {
 	h := &categoryHandler{categoryUseCase: categoryUseCase}
 	const basePath = "/v1/category"
 	categoryGroup := e.Group(basePath)
+	categoryGroup.Use(jwtMiddleware)
 	categoryGroup.GET("/:id/posts", h.getCategoryPostsPage)
 
 	return h

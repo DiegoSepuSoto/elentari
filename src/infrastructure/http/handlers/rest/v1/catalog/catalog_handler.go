@@ -10,10 +10,11 @@ type catalogHandler struct {
 	catalogUseCase usecase.CatalogUseCase
 }
 
-func NewCatalogHandler(e *echo.Echo, catalogUseCase usecase.CatalogUseCase) *catalogHandler {
+func NewCatalogHandler(e *echo.Echo, catalogUseCase usecase.CatalogUseCase, jwtMiddleware echo.MiddlewareFunc) *catalogHandler {
 	h := &catalogHandler{catalogUseCase: catalogUseCase}
 	const basePath = "/v1/catalog"
 	catalogGroup := e.Group(basePath)
+	catalogGroup.Use(jwtMiddleware)
 	catalogGroup.GET("", h.getCatalog)
 
 	return h

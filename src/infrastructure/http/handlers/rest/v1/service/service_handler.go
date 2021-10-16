@@ -10,12 +10,13 @@ type serviceHandler struct {
 	serviceUseCase usecase.ServiceUseCase
 }
 
-func NewServiceHandler(e *echo.Echo, serviceUseCase usecase.ServiceUseCase) *serviceHandler {
+func NewServiceHandler(e *echo.Echo, serviceUseCase usecase.ServiceUseCase, jwtMiddleware echo.MiddlewareFunc) *serviceHandler {
 	h := &serviceHandler{serviceUseCase: serviceUseCase}
 	const basePath = "/v1/service"
-	postGroup := e.Group(basePath)
-	postGroup.GET("/:id", h.getServicePage)
-	postGroup.GET("/:id/posts", h.getServicePostsPage)
+	serviceGroup := e.Group(basePath)
+	serviceGroup.Use(jwtMiddleware)
+	serviceGroup.GET("/:id", h.getServicePage)
+	serviceGroup.GET("/:id/posts", h.getServicePostsPage)
 
 	return h
 }

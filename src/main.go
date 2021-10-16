@@ -12,6 +12,7 @@ import (
 	postRepository "elentari/src/infrastructure/graphql/repository/iluvatar/post"
 	serviceRepository "elentari/src/infrastructure/graphql/repository/iluvatar/service"
 	"elentari/src/infrastructure/http/handlers/rest/health"
+	customMiddlewares "elentari/src/infrastructure/http/handlers/rest/middleware"
 	authHandler "elentari/src/infrastructure/http/handlers/rest/v1/auth"
 	catalogHandler "elentari/src/infrastructure/http/handlers/rest/v1/catalog"
 	categoryHandler "elentari/src/infrastructure/http/handlers/rest/v1/category"
@@ -46,25 +47,28 @@ func main() {
 
 	serviceRepositoryImplementation := serviceRepository.NewServiceIluvatarRepository(graphQLClient)
 	homeUseCaseImplementation := homeUseCase.NewHomeUseCase(serviceRepositoryImplementation)
-	homeHandler.NewHomeHandler(e, homeUseCaseImplementation)
 
 	postRepositoryImplementation := postRepository.NewPostIluvatarRepository(graphQLClient)
 	postPageUseCaseImplementation := postUseCase.NewPostUseCase(postRepositoryImplementation)
-	postHandler.NewPostHandler(e, postPageUseCaseImplementation)
 
 	serviceUseCaseImplementation := serviceUseCase.NewServiceUseCase(serviceRepositoryImplementation)
-	serviceHandler.NewServiceHandler(e, serviceUseCaseImplementation)
 
 	categoryRepositoryImplementation := categoryRepository.NewCategoryIluvatarRepository(graphQLClient)
 	catalogUseCaseImplementation := catalogUseCase.NewCatalogUseCase(serviceRepositoryImplementation, categoryRepositoryImplementation)
-	catalogHandler.NewCatalogHandler(e, catalogUseCaseImplementation)
 
 	categoryUseCaseImplementation := categoryUseCase.NewCategoryUseCase(categoryRepositoryImplementation)
-	categoryHandler.NewCategoryHandler(e, categoryUseCaseImplementation)
 
 	iluvatarHTTPClient := client.NewHTTPClientCall(os.Getenv("ILUVATAR_HOST"), &http.Client{})
 	authRepositoryImplementation := authRepository.NewAuthIluvatarRepository(iluvatarHTTPClient)
 	authUsecaseImplementation := authUseCase.NewAuthUseCase(authRepositoryImplementation)
+
+	jwtMiddleware := customMiddlewares.NewJWTMiddleware(authUsecaseImplementation)
+
+	homeHandler.NewHomeHandler(e, homeUseCaseImplementation, jwtMiddleware)
+	postHandler.NewPostHandler(e, postPageUseCaseImplementation, jwtMiddleware)
+	serviceHandler.NewServiceHandler(e, serviceUseCaseImplementation, jwtMiddleware)
+	catalogHandler.NewCatalogHandler(e, catalogUseCaseImplementation, jwtMiddleware)
+	categoryHandler.NewCategoryHandler(e, categoryUseCaseImplementation, jwtMiddleware)
 	authHandler.NewAuthHandler(e, authUsecaseImplementation)
 	
 	quit := make(chan os.Signal, 1)
