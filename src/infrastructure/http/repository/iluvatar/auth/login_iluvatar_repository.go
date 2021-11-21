@@ -2,6 +2,7 @@ package auth
 
 import (
 	"elentari/src/domain/models"
+	"elentari/src/domain/models/requests"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -10,9 +11,7 @@ import (
 	"net/http"
 )
 
-func (r *authIluvatarRepository) Login(email, password string) (*models.Student, error) {
-	body := echo.Map{"email": email, "password": password}
-
+func (r *authIluvatarRepository) Login(loginRequest *requests.LoginRequest) (*models.Student, error) {
 	headers := http.Header{
 		echo.HeaderContentType: []string{echo.MIMEApplicationJSON},
 	}
@@ -21,7 +20,7 @@ func (r *authIluvatarRepository) Login(email, password string) (*models.Student,
 		Path("/v1/auth/login").
 		Method(http.MethodPost).
 		Headers(headers).
-		Body(body).
+		Body(loginRequest).
 		Do()
 
 	defer response.Body.Close()

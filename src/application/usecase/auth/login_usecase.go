@@ -1,7 +1,10 @@
 package auth
 
-import "elentari/src/domain/models"
+import (
+	"elentari/src/domain/models"
+	"elentari/src/domain/models/requests"
+)
 
-func (u *authUseCase) Login(email, password string) (*models.Student, error) {
-	return u.authRepository.Login(email, password)
+func (u *authUseCase) Login(loginRequest *requests.LoginRequest) (*models.Student, error) {
+	return u.authRepository.Login(loginRequest)
 }
