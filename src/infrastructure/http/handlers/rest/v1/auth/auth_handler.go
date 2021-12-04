@@ -2,7 +2,7 @@ package auth
 
 import (
 	"elentari/src/application/usecase"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 const basePath = "/v1/auth"

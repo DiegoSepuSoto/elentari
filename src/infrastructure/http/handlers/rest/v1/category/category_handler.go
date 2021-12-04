@@ -2,7 +2,7 @@ package category
 
 import (
 	"elentari/src/application/usecase"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 	"net/http"
 )
 
@@ -20,6 +20,17 @@ func NewCategoryHandler(e *echo.Echo, categoryUseCase usecase.CategoryUseCase, j
 	return h
 }
 
+// @Summary Publicaciones de una categoría
+// @Description Devuelve todas las publicaciones que presentan la categoría enviada por parámetro
+// @Tags BFF V1 - Categorías
+// @Accept json
+// @Produce json
+// @Param Token-Autorización header string true "Bearer token"
+// @Param id path string true "123456"
+// @Success 200 {object} models.CategoryPostsPage "OK"
+// @Failure 401 {object} map[string]interface{} "Unauthorized"
+// @Failure 502 {object} map[string]interface{} "BadGateway"
+// @Router /v1/category/{id}/posts [get]
 func (h *categoryHandler) getCategoryPostsPage(c echo.Context) error {
 	categoryID := c.Param("id")
 	categoryPosts, err := h.categoryUseCase.GetCategoryPostsPage(categoryID)

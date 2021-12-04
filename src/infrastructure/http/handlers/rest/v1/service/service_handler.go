@@ -2,7 +2,7 @@ package service
 
 import (
 	"elentari/src/application/usecase"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 	"net/http"
 )
 
@@ -21,6 +21,17 @@ func NewServiceHandler(e *echo.Echo, serviceUseCase usecase.ServiceUseCase, jwtM
 	return h
 }
 
+// @Summary Pantalla de Servicio
+// @Description Devuelve el detalle de un servicio estudiantil para visualizarlo en la aplicación
+// @Tags BFF V1 - Servicios Estudiantiles
+// @Accept json
+// @Produce json
+// @Param Token-Autorización header string true "Bearer token"
+// @Param id path string true "123456"
+// @Success 200 {object} models.ServicePage "OK"
+// @Failure 401 {object} map[string]interface{} "Unauthorized"
+// @Failure 502 {object} map[string]interface{} "BadGateway"
+// @Router /v1/service/{id} [get]
 func (h serviceHandler) getServicePage(c echo.Context) error {
 	serviceID := c.Param("id")
 	servicePage, err := h.serviceUseCase.GetServicePage(serviceID)
@@ -30,6 +41,17 @@ func (h serviceHandler) getServicePage(c echo.Context) error {
 	return c.JSON(http.StatusOK, servicePage)
 }
 
+// @Summary Publicaciones de un Servicio
+// @Description Devuelve todas las publicaciones creadas por un servicio estudiantil especificado
+// @Tags BFF V1 - Servicios Estudiantiles
+// @Accept json
+// @Produce json
+// @Param Token-Autorización header string true "Bearer token"
+// @Param id path string true "123456"
+// @Success 200 {object} models.ServicePostsPage "OK"
+// @Failure 401 {object} map[string]interface{} "Unauthorized"
+// @Failure 502 {object} map[string]interface{} "BadGateway"
+// @Router /v1/service/{id}/posts [get]
 func (h serviceHandler) getServicePostsPage(c echo.Context) error {
 	serviceID := c.Param("id")
 	servicePostsPage, err := h.serviceUseCase.GetServicePostsPage(serviceID)

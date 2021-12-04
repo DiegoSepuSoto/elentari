@@ -2,7 +2,7 @@ package catalog
 
 import (
 	"elentari/src/application/usecase"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 	"net/http"
 )
 
@@ -20,6 +20,16 @@ func NewCatalogHandler(e *echo.Echo, catalogUseCase usecase.CatalogUseCase, jwtM
 	return h
 }
 
+// @Summary Pantalla de Catálogo
+// @Description Devuelve el contenido a mostrar en la pantalla de catélogo
+// @Tags BFF V1 - Catálogo
+// @Accept json
+// @Produce json
+// @Param Token-Autorización header string true "Bearer token"
+// @Success 200 {object} models.CatalogPage "OK"
+// @Failure 401 {object} map[string]interface{} "Unauthorized"
+// @Failure 502 {object} map[string]interface{} "BadGateway"
+// @Router /v1/catalog [get]
 func (h *catalogHandler) getCatalog(c echo.Context) error {
 	catalogPage, err := h.catalogUseCase.GetCatalogPage()
 	if err != nil {

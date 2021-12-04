@@ -2,7 +2,7 @@ package home
 
 import (
 	"elentari/src/application/usecase"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 	"net/http"
 )
 
@@ -20,6 +20,16 @@ func NewHomeHandler(e *echo.Echo, homeUseCase usecase.HomeUseCase, jwtMiddleware
 	return h
 }
 
+// @Summary Pantalla de Inicio
+// @Description Devuelve el contenido a mostrar en la pantalla de inicio de la aplicación
+// @Tags BFF V1 - Pantalla Principal
+// @Accept json
+// @Produce json
+// @Param Token-Autorización header string true "Bearer token"
+// @Success 200 {object} models.HomePage "OK"
+// @Failure 401 {object} map[string]interface{} "Unauthorized"
+// @Failure 502 {object} map[string]interface{} "BadGateway"
+// @Router /v1/home [get]
 func (h homeHandler) getHome(c echo.Context) error {
 	homeContent, err := h.homeUseCase.GetHomePage()
 	if err != nil {

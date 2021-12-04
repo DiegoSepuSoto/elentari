@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	_ "elentari/docs"
 	authUseCase "elentari/src/application/usecase/auth"
 	catalogUseCase "elentari/src/application/usecase/catalog"
 	categoryUseCase "elentari/src/application/usecase/category"
@@ -22,11 +23,12 @@ import (
 	authRepository "elentari/src/infrastructure/http/repository/iluvatar/auth"
 	"elentari/src/shared/validations"
 	"github.com/go-playground/validator/v10"
-	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
 	"github.com/pzentenoe/graphql-client"
 	client "github.com/pzentenoe/httpclient-call-go"
+	echoSwagger "github.com/swaggo/echo-swagger"
 	"net/http"
 	"os"
 	"os/signal"
@@ -34,13 +36,21 @@ import (
 	"time"
 )
 
+
+// @title Documentación Artefacto BFF
+// @version 1.0
+// @description En esta documentación se encuentran los detalles de los endpoints presentes en el artefacto BFF del proyecto Kümelen
+// @contact.name Diego Sepúlveda
+// @contact.email diego.sepulvedas@utem.cl
 func main() {
 	e := echo.New()
 	e.Validator = validations.NewCustomValidator(validator.New())
 	e.HideBanner = true
 	e.Use(middleware.CORS())
 	e.Use(middleware.Recover())
-	
+
+	e.GET("/swagger/*", echoSwagger.WrapHandler)
+
 	health.NewHealthHandler(e)
 
 	graphQLClient := graphql.NewClient(os.Getenv("ILUVATAR_CMS_HOST") + "/graphql")

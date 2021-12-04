@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 	client "github.com/pzentenoe/httpclient-call-go"
 	"io/ioutil"
 	"net/http"

@@ -1,0 +1,498 @@
+definitions:
+  models.CatalogPage:
+    properties:
+      categories:
+        items:
+          $ref: '#/definitions/models.Category'
+        type: array
+      services:
+        items:
+          $ref: '#/definitions/models.Service'
+        type: array
+    type: object
+  models.Category:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  models.CategoryPostsPage:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      posts_for_preview:
+        items:
+          $ref: '#/definitions/models.PostForPreview'
+        type: array
+    type: object
+  models.Contact:
+    properties:
+      id:
+        type: string
+      link:
+        type: string
+      name:
+        type: string
+      type:
+        type: string
+    type: object
+  models.HomePage:
+    properties:
+      services_with_posts:
+        items:
+          $ref: '#/definitions/models.ServiceWithPosts'
+        type: array
+    type: object
+  models.Person:
+    properties:
+      charge:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      profile_picture_url:
+        type: string
+    type: object
+  models.PostCategory:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  models.PostForPreview:
+    properties:
+      id:
+        type: string
+      image_url:
+        type: string
+      summary:
+        type: string
+      title:
+        type: string
+    type: object
+  models.PostPage:
+    properties:
+      body:
+        type: string
+      categories:
+        items:
+          $ref: '#/definitions/models.PostCategory'
+        type: array
+      id:
+        type: string
+      image:
+        type: string
+      service_id:
+        type: string
+      service_name:
+        type: string
+      title:
+        type: string
+    type: object
+  models.PostSearchResult:
+    properties:
+      posts:
+        items:
+          $ref: '#/definitions/models.PostForPreview'
+        type: array
+    type: object
+  models.Service:
+    properties:
+      id:
+        type: string
+      logo_url:
+        type: string
+      name:
+        type: string
+    type: object
+  models.ServicePage:
+    properties:
+      contacts:
+        items:
+          $ref: '#/definitions/models.Contact'
+        type: array
+      description:
+        type: string
+      id:
+        type: string
+      logo_url:
+        type: string
+      name:
+        type: string
+      persons:
+        items:
+          $ref: '#/definitions/models.Person'
+        type: array
+    type: object
+  models.ServicePostsPage:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      posts_for_preview:
+        items:
+          $ref: '#/definitions/models.PostForPreview'
+        type: array
+    type: object
+  models.ServiceWithPosts:
+    properties:
+      abbreviation:
+        type: string
+      id:
+        type: string
+      posts_for_preview:
+        items:
+          $ref: '#/definitions/models.PostForPreview'
+        type: array
+    type: object
+  models.Student:
+    properties:
+      career:
+        type: string
+      email:
+        type: string
+      full_name:
+        type: string
+      refresh_token:
+        type: string
+      token:
+        type: string
+    type: object
+info:
+  contact:
+    email: diego.sepulvedas@utem.cl
+    name: Diego Sepúlveda
+  description: En esta documentación se encuentran los detalles de los endpoints presentes
+    en el artefacto BFF del proyecto Kümelen
+  title: Documentación Artefacto BFF
+  version: "1.0"
+paths:
+  /v1/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Permite a los estudiantes iniciar sesión con sus credenciales de
+        Pasaporte.UTEM
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Student'
+        "400":
+          description: BadRequest
+          schema:
+            additionalProperties: true
+            type: object
+        "502":
+          description: BadGateway
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Inicio de Sesión
+      tags:
+      - BFF V1 - Autenticación
+  /v1/auth/refresh-token:
+    post:
+      consumes:
+      - application/json
+      description: Para reducir la cantidad de veces que un usuario debe iniciar sesión,
+        se diponibiliza un endpoint para actualizar el token de consultas a los diferentes
+        servicios
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "502":
+          description: BadGateway
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Actualización de Token
+      tags:
+      - BFF V1 - Autenticación
+  /v1/auth/validate-token:
+    post:
+      consumes:
+      - application/json
+      description: Con el fin de detectar la validez de un token se disponibiliza
+        este endpoint para verificar su integridad
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Validación de Token
+      tags:
+      - BFF V1 - Autenticación
+  /v1/catalog:
+    get:
+      consumes:
+      - application/json
+      description: Devuelve el contenido a mostrar en la pantalla de catélogo
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Token-Autorización
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CatalogPage'
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "502":
+          description: BadGateway
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Pantalla de Catálogo
+      tags:
+      - BFF V1 - Catálogo
+  /v1/category/{id}/posts:
+    get:
+      consumes:
+      - application/json
+      description: Devuelve todas las publicaciones que presentan la categoría enviada
+        por parámetro
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Token-Autorización
+        required: true
+        type: string
+      - description: "123456"
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CategoryPostsPage'
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "502":
+          description: BadGateway
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Publicaciones de una categoría
+      tags:
+      - BFF V1 - Categorías
+  /v1/home:
+    get:
+      consumes:
+      - application/json
+      description: Devuelve el contenido a mostrar en la pantalla de inicio de la
+        aplicación
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Token-Autorización
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.HomePage'
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "502":
+          description: BadGateway
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Pantalla de Inicio
+      tags:
+      - BFF V1 - Pantalla Principal
+  /v1/post/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Devuelve el detalle de una publicación pora ser mostrado en la
+        aplicación
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Token-Autorización
+        required: true
+        type: string
+      - description: "123456"
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.PostPage'
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "502":
+          description: BadGateway
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Pantalla de Publicación
+      tags:
+      - BFF V1 - Publicaciones
+  /v1/post/search/{searchTerm}:
+    get:
+      consumes:
+      - application/json
+      description: Devuelve todas las publicaciones que cumplen con el término de
+        búsqueda
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Token-Autorización
+        required: true
+        type: string
+      - description: bienestar
+        in: path
+        name: searchTerm
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.PostSearchResult'
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "502":
+          description: BadGateway
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Resultados de Búsqueda
+      tags:
+      - BFF V1 - Publicaciones
+  /v1/service/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Devuelve el detalle de un servicio estudiantil para visualizarlo
+        en la aplicación
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Token-Autorización
+        required: true
+        type: string
+      - description: "123456"
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ServicePage'
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "502":
+          description: BadGateway
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Pantalla de Servicio
+      tags:
+      - BFF V1 - Servicios Estudiantiles
+  /v1/service/{id}/posts:
+    get:
+      consumes:
+      - application/json
+      description: Devuelve todas las publicaciones creadas por un servicio estudiantil
+        especificado
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Token-Autorización
+        required: true
+        type: string
+      - description: "123456"
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ServicePostsPage'
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "502":
+          description: BadGateway
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Publicaciones de un Servicio
+      tags:
+      - BFF V1 - Servicios Estudiantiles
+swagger: "2.0"
