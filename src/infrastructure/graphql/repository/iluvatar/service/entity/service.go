@@ -26,6 +26,12 @@ type ServiceInPost struct {
 	Name string `json:"Nombre"`
 }
 
+type ServiceInNotification struct {
+	ID   string                      `json:"id"`
+	Name string                      `json:"Nombre"`
+	Logo *sharedEntity.IluvatarImage `json:"Logo"`
+}
+
 type PostWithSummaryAndImages struct {
 	ID      string                      `json:"id"`
 	Title   string                      `json:"Titulo"`

@@ -30,7 +30,7 @@ func NewHomeHandler(e *echo.Echo, homeUseCase usecase.HomeUseCase, jwtMiddleware
 // @Failure 401 {object} map[string]interface{} "Unauthorized"
 // @Failure 502 {object} map[string]interface{} "BadGateway"
 // @Router /v1/home [get]
-func (h homeHandler) getHome(c echo.Context) error {
+func (h *homeHandler) getHome(c echo.Context) error {
 	homeContent, err := h.homeUseCase.GetHomePage()
 	if err != nil {
 		return c.JSON(http.StatusBadGateway, echo.Map{"error_message": err.Error()})

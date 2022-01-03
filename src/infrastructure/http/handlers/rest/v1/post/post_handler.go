@@ -32,7 +32,7 @@ func NewPostHandler(e *echo.Echo, postUseCase usecase.PostUseCase, jwtMiddleware
 // @Failure 401 {object} map[string]interface{} "Unauthorized"
 // @Failure 502 {object} map[string]interface{} "BadGateway"
 // @Router /v1/post/{id} [get]
-func (h postHandler) getPostPage(c echo.Context) error {
+func (h *postHandler) getPostPage(c echo.Context) error {
 	postID := c.Param("id")
 	postPage, err := h.postUseCase.GetPostPage(postID)
 	if err != nil {
@@ -52,7 +52,7 @@ func (h postHandler) getPostPage(c echo.Context) error {
 // @Failure 401 {object} map[string]interface{} "Unauthorized"
 // @Failure 502 {object} map[string]interface{} "BadGateway"
 // @Router /v1/post/search/{searchTerm} [get]
-func (h postHandler) getPostsByTerm(c echo.Context) error {
+func (h *postHandler) getPostsByTerm(c echo.Context) error {
 	searchTerm := c.Param("searchTerm")
 	postsByTerm, err := h.postUseCase.GetPostsByTerm(searchTerm)
 	if err != nil {

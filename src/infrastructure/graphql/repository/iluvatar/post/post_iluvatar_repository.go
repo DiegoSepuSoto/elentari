@@ -14,7 +14,6 @@ func NewPostIluvatarRepository(graphqlClient *graphql.Client) *postIluvatarRepos
 	return &postIluvatarRepository{graphqlClient: graphqlClient}
 }
 
-
 func (r *postIluvatarRepository) fillGraphqlHeaders(graphqlRequest *graphql.GraphqlRequest) {
 	iluvatarToken := os.Getenv("ILUVATAR_TOKEN")
 	graphqlRequest.Header.Add("Authorization", fmt.Sprintf("Bearer %s", iluvatarToken))

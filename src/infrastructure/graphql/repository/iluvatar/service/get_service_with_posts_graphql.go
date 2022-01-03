@@ -27,7 +27,7 @@ const getServiceWithPosts = `
 	}
 `
 
-func (r serviceIluvatarRepository) GetServiceWithPosts(serviceID string) (*models.ServicePostsPage, error) {
+func (r *serviceIluvatarRepository) GetServiceWithPosts(serviceID string) (*models.ServicePostsPage, error) {
 	var res entity.ServiceWithPostsResponse
 	var errorResp errorEntity.ErrorResponse
 	graphqlRequest := graphql.NewGraphqlRequest(getServiceWithPosts)
@@ -62,4 +62,3 @@ func mapEntityServiceWithPostsToModelServiceWithPosts(serviceWithPostsEntity *en
 		PostsForPreview: posts,
 	}
 }
-

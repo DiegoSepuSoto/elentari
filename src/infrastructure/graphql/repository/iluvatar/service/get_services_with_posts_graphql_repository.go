@@ -27,7 +27,7 @@ const getServicesWithPosts = `
 	}
 `
 
-func (r serviceIluvatarRepository) GetServicesWithPosts() (*models.HomePage, error) {
+func (r *serviceIluvatarRepository) GetServicesWithPosts() (*models.HomePage, error) {
 	var res entity.ServicesWithPostsResponse
 	var errorResp errorEntity.ErrorResponse
 	graphqlRequest := graphql.NewGraphqlRequest(getServicesWithPosts)

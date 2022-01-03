@@ -32,7 +32,7 @@ func NewServiceHandler(e *echo.Echo, serviceUseCase usecase.ServiceUseCase, jwtM
 // @Failure 401 {object} map[string]interface{} "Unauthorized"
 // @Failure 502 {object} map[string]interface{} "BadGateway"
 // @Router /v1/service/{id} [get]
-func (h serviceHandler) getServicePage(c echo.Context) error {
+func (h *serviceHandler) getServicePage(c echo.Context) error {
 	serviceID := c.Param("id")
 	servicePage, err := h.serviceUseCase.GetServicePage(serviceID)
 	if err != nil {
@@ -52,7 +52,7 @@ func (h serviceHandler) getServicePage(c echo.Context) error {
 // @Failure 401 {object} map[string]interface{} "Unauthorized"
 // @Failure 502 {object} map[string]interface{} "BadGateway"
 // @Router /v1/service/{id}/posts [get]
-func (h serviceHandler) getServicePostsPage(c echo.Context) error {
+func (h *serviceHandler) getServicePostsPage(c echo.Context) error {
 	serviceID := c.Param("id")
 	servicePostsPage, err := h.serviceUseCase.GetServicePostsPage(serviceID)
 	if err != nil {

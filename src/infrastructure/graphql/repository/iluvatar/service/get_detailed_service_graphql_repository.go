@@ -38,7 +38,8 @@ const getDetailedService = `
 	  }
 	}
 `
-func (r serviceIluvatarRepository) GetDetailedService(serviceID string) (*models.ServicePage, error) {
+
+func (r *serviceIluvatarRepository) GetDetailedService(serviceID string) (*models.ServicePage, error) {
 	var res entity.DetailedServiceResponse
 	var errorResp errorEntity.ErrorResponse
 	graphqlRequest := graphql.NewGraphqlRequest(getDetailedService)

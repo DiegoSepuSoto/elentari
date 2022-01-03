@@ -31,7 +31,7 @@ const getDetailedPost = `
 	}
 `
 
-func (r postIluvatarRepository) GetDetailedPost(postID string) (*models.PostPage, error) {
+func (r *postIluvatarRepository) GetDetailedPost(postID string) (*models.PostPage, error) {
 	var res entity.DetailedPostResponse
 	var errorResp errorEntity.ErrorResponse
 	graphqlRequest := graphql.NewGraphqlRequest(getDetailedPost)
@@ -59,12 +59,12 @@ func mapEntityDetailedPostToPostPageModel(entityPost *entity.DetailedPost) *mode
 	}
 
 	return &models.PostPage{
-		ID:         entityPost.ID,
-		Title:      entityPost.Title,
-		Image:      os.Getenv("ILUVATAR_CMS_HOST") + entityPost.Image.URL,
-		Body:       entityPost.Body,
-		ServiceID:  entityPost.Service.ID,
+		ID:          entityPost.ID,
+		Title:       entityPost.Title,
+		Image:       os.Getenv("ILUVATAR_CMS_HOST") + entityPost.Image.URL,
+		Body:        entityPost.Body,
+		ServiceID:   entityPost.Service.ID,
 		ServiceName: entityPost.Service.Name,
-		Categories: postCategories,
+		Categories:  postCategories,
 	}
 }

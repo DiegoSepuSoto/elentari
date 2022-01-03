@@ -7,9 +7,11 @@ import (
 	catalogUseCase "elentari/src/application/usecase/catalog"
 	categoryUseCase "elentari/src/application/usecase/category"
 	homeUseCase "elentari/src/application/usecase/home"
+	notificationUseCase "elentari/src/application/usecase/notification"
 	postUseCase "elentari/src/application/usecase/post"
 	serviceUseCase "elentari/src/application/usecase/service"
 	categoryRepository "elentari/src/infrastructure/graphql/repository/iluvatar/category"
+	notificationRepository "elentari/src/infrastructure/graphql/repository/iluvatar/notification"
 	postRepository "elentari/src/infrastructure/graphql/repository/iluvatar/post"
 	serviceRepository "elentari/src/infrastructure/graphql/repository/iluvatar/service"
 	"elentari/src/infrastructure/http/handlers/rest/health"
@@ -18,6 +20,7 @@ import (
 	catalogHandler "elentari/src/infrastructure/http/handlers/rest/v1/catalog"
 	categoryHandler "elentari/src/infrastructure/http/handlers/rest/v1/category"
 	homeHandler "elentari/src/infrastructure/http/handlers/rest/v1/home"
+	notificationHandler "elentari/src/infrastructure/http/handlers/rest/v1/notification"
 	postHandler "elentari/src/infrastructure/http/handlers/rest/v1/post"
 	serviceHandler "elentari/src/infrastructure/http/handlers/rest/v1/service"
 	authRepository "elentari/src/infrastructure/http/repository/iluvatar/auth"
@@ -35,7 +38,6 @@ import (
 	"syscall"
 	"time"
 )
-
 
 // @title Documentación Artefacto BFF
 // @version 1.0
@@ -72,6 +74,9 @@ func main() {
 	authRepositoryImplementation := authRepository.NewAuthIluvatarRepository(iluvatarHTTPClient)
 	authUsecaseImplementation := authUseCase.NewAuthUseCase(authRepositoryImplementation)
 
+	notificationRepositoryImplementation := notificationRepository.NewNotificationIluvatarRepository(graphQLClient)
+	notificationUseCaseImplementation := notificationUseCase.NewNotificationUseCase(notificationRepositoryImplementation)
+
 	jwtMiddleware := customMiddlewares.NewJWTMiddleware(authUsecaseImplementation)
 
 	homeHandler.NewHomeHandler(e, homeUseCaseImplementation, jwtMiddleware)
@@ -79,8 +84,9 @@ func main() {
 	serviceHandler.NewServiceHandler(e, serviceUseCaseImplementation, jwtMiddleware)
 	catalogHandler.NewCatalogHandler(e, catalogUseCaseImplementation, jwtMiddleware)
 	categoryHandler.NewCategoryHandler(e, categoryUseCaseImplementation, jwtMiddleware)
+	notificationHandler.NewNotificationHandler(e, notificationUseCaseImplementation, jwtMiddleware)
 	authHandler.NewAuthHandler(e, authUsecaseImplementation)
-	
+
 	quit := make(chan os.Signal, 1)
 	go startServer(e, quit)
 	signal.Notify(quit, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
